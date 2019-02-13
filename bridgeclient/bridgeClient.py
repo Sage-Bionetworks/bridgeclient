@@ -41,11 +41,11 @@ class bridgeConnector:
         if email is None:
              email = raw_input('Username:')
              password = getpass.getpass('Password:' )
-        print email, password
+        print(email, password)
         response = self.restPOST('/v3/auth/signIn', headers={},
                                  json={"study": study, "email": email, "password": password, 'type': type})
         #TODO add caching of username/password
-        print 'Welcome %s' % response['firstName']
+        print('Welcome %s' % response['firstName'])
         self.auth = response
 
 
@@ -66,7 +66,7 @@ class bridgeConnector:
             dfs.append(pd.DataFrame(response['items']))
             n += len(dfs[-1])
             params['offsetBy'] +=len(dfs[-1])
-            print n
+            print(n)
         return pd.concat(dfs)
 
 
