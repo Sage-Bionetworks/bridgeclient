@@ -1,3 +1,4 @@
+from __future__ import print_function
 import datetime
 import json
 import os
@@ -78,13 +79,14 @@ class bridgeConnector:
         """Get information about last requests (uploads and signOn etc for specific users)"""
         return  self.restGET('/v3/participants/%s/requestInfo' %userId)
 
+
     def getAdherence(self, userId, studyId):
         """Gets 500 adherence records for a specific userId in a specific study returns json"""
-        """Gets adherence records for """
         result = self.restPOST('/v5/studies/%s/participants/%s/adherence/search?pageSize=500' %(studyId, userId),
                                      json = {"adherenceRecordType": "assessment"})
         return pd.json_normalize(result['items'])    
-        
+
+    
     def _build_uri_and_headers(self, uri, headers):
         parsedURL = urlparse(uri)
         if parsedURL.netloc == '':
@@ -93,13 +95,13 @@ class bridgeConnector:
             headers = {'Bridge-Session':self.auth['sessionToken']}
         return uri, headers
 
-        
+
     def restGET(self, uri, headers=None, **kwargs):
         """
         Performs a REST GET operation to the Bridge server.
         :param uri:      URI on which get is performed
         :param headers:  Dictionary of headers to use rather than the API-key-signed default set of headers
-        :param kwargs:   Any other arguments taken by a 
+        :param kwargs:   Any other arguments taken by a
                        `requests <http://docs.python-requests.org/en/latest/>`_ method
         :returns: JSON encoding of response
         """
