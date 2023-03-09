@@ -41,7 +41,6 @@ class bridgeConnector:
         if email is None:
              email = raw_input('Username:')
              password = getpass.getpass('Password:' )
-        print(email, password)
         response = self.restPOST('/v3/auth/signIn', headers={},
                                  json={"study": study, "email": email, "password": password, 'type': type})
         #TODO add caching of username/password
@@ -79,7 +78,13 @@ class bridgeConnector:
         """Get information about last requests (uploads and signOn etc for specific users)"""
         return  self.restGET('/v3/participants/%s/requestInfo' %userId)
 
-    
+    def getAdherence(self, userId, studyId):
+        """Gets 500 adherence records for a specific userId in a specific study returns json"""
+        """Gets adherence records for """
+        result = self.restPOST('/v5/studies/%s/participants/%s/adherence/search?pageSize=500' %(studyId, userId),
+                                     json = {"adherenceRecordType": "assessment"})
+        return pd.json_normalize(result['items'])    
+        
     def _build_uri_and_headers(self, uri, headers):
         parsedURL = urlparse(uri)
         if parsedURL.netloc == '':
