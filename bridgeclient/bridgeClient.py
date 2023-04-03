@@ -40,7 +40,7 @@ class bridgeConnector:
             email = config_auth_dict.get('email', None)
             password = config_auth_dict.get('password', None)
         if email is None:
-             email = raw_input('Username:')
+             email = input('Username:')
              password = getpass.getpass('Password:' )
         response = self.restPOST('/v3/auth/signIn', headers={},
                                  json={"study": study, "email": email, "password": password, 'type': type})
@@ -58,7 +58,7 @@ class bridgeConnector:
         """
         total=100
         n=0
-        params={'startDate':startDate, 'endDate':  endDate, 'offsetBy': 0}
+        params={'startDate':startDate, 'endDate':  endDate, 'offsetBy': 0, 'pageSize': 100}
         dfs=[]
         while n<total:
             response = self.restGET('/v3/participants', params=params)
@@ -82,6 +82,7 @@ class bridgeConnector:
 
     def getAdherence(self, userId, studyId):
         """Gets 500 adherence records for a specific userId in a specific study returns json"""
+        #TODO this needs to be changed to used Paged API.
         result = self.restPOST('/v5/studies/%s/participants/%s/adherence/search?pageSize=500' %(studyId, userId),
                                      json = {"adherenceRecordType": "assessment"})
         return pd.json_normalize(result['items'])    
